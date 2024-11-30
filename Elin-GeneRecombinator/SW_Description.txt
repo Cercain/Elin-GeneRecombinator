@@ -1,0 +1,34 @@
+[b][Currently only in English][/b]
+
+[h1][b]Genetic Recombination[/b][/h1]
+
+This mod add a secondary function to the Gene Machine: Recombinate!
+[img]https://i.imgur.com/g8dHRiB.png[/img]
+(it also adds a box lookup to both the normal Use and Recombinate functions for easier gene access)
+
+
+Select two genes of the same type (normal or superior).
+[img]https://i.imgur.com/DQboFKh.png[/img]
+
+A helpful Lab Assistant will get to work recombinating the input genes (helpful Lab Assistant is automatically supplied).
+This can be sped up using Syringes from Little Garden.
+[img]https://i.imgur.com/ZiprTWZ.png[/img]
+
+Once the [strike]Incubation Sacrifice[/strike] helpful Lab Assistant has finished recombinating the genes, you can Use the Gene Machine to get your new gene!
+
+With this mod you will be able to get multiple body slots on the same gene (at an increased feat cost)
+[img]https://i.imgur.com/RCrhG3r.png[/img]
+
+
+the amount of memories a recombinated gene will have is determined by the average amount of memories of the input genes +/- 1.
+ie. gene1: 4 memories & gene 2: 3 memories. this averages to 3.5, however we round this up to 4. Giving the output gene a total of 3-5 memories randomly chosen from the input genes.
+
+
+[h2]Future Plans[h2]
+[list]
+[*]Config for amount of memories
+[*]Config for weighting the best memories to be more/less likely
+[*]Config or upgrade system to allow for more genes to combine at once
+[*]Chance for normal gene inputs to upgrade to a superior gene allowing for more memories
+[*]It's own separate machine
+[/list]

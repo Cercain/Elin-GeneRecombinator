@@ -63,7 +63,7 @@ namespace Elin_GeneRecombinator
 
             var duration = GetRecombDurationFromCost(genes.Select(x => x.c_DNA).ToList());
 
-            var c = CharaGen.Create("gene");
+            var c = IncubationSacrifice._Create("gene");
 
             c.c_altName = "Incubation Sacrifice";
             EClass._zone.AddCard(c, EClass.pc.pos);
@@ -73,7 +73,8 @@ namespace Elin_GeneRecombinator
             //c.SetHidden(true);
             c.RemoveCondition<ConSleep>();
             c.PlaySound("ride", 1f, true);
-            genes.ForEach(x => x.Destroy());
+            //genes.ForEach(x => x.Destroy());
+            genes.ForEach(x => c.AddCard(x));
             c.AddCard(newThing);
 
             var condition = (c.AddCondition<ConSuspend>(100, true) as ConSuspend);
@@ -114,16 +115,23 @@ namespace Elin_GeneRecombinator
             
             var avg = (int)(genes.Average(x => x.vals.Count)/2);
 
-            var count = UnityEngine.Random.Range(avg-1, avg+2);
+            var count = UnityEngine.Random.Range(avg+Mod_GeneRecombinator.MemoryAverageMin.Value, (avg+1)+Mod_GeneRecombinator.MemoryAverageMax.Value);
 
             var memories = GenesToMemory(genes);
 
             var selected = new List<_memory>();
             for (int i = 0; i < count; i++)
             {
-                var index = UnityEngine.Random.Range(0, memories.Count);
-                selected.Add(memories[index]);
-                memories.RemoveAt(index);
+                if (!memories.Any()) break;
+
+                bool added = false;
+                do
+                {
+                    var mem = memories.PopRandom();
+                    Console.WriteLine($"[GeneRecomb][Debug] Selected Gene id:{mem.id} val:{mem.val} cost:{mem.funcCost(mem.val)}");
+                    added = AddVal(dna, mem);
+                }
+                while (added == false);
             }
 
             foreach (var item in selected.OrderBy(x => x.id))
@@ -135,24 +143,12 @@ namespace Elin_GeneRecombinator
             return thing;
         }
 
-        private void AddVal(DNA gene, _memory memory)
+        private bool AddVal(DNA gene, _memory memory)
         {
             int id = memory.id;
             int v = memory.val;
-            bool allowStack = true;
-            Func<int, int> funcCost = (int v) => v / 5 + 1;
 
             var ele = Element.Get(id);
-
-            if(ele.category == "feat")
-            {
-                allowStack = false;
-                funcCost = (int v) => ele.cost[0] * 5;
-            }
-            else if(ele.category == "slot")
-            {
-                funcCost = (int v) => 20;
-            }
 
             bool flag = false;
             int num = EClass.curve(v, 20, 10, 90);
@@ -161,27 +157,25 @@ namespace Elin_GeneRecombinator
             {
                 if (gene.vals[k] == id)
                 {
-                    if (allowStack)
-                    {
-                        if (ele.category == "slot")
-                        {
-                            gene.vals.Add(id);
-                            gene.vals.Add(v);
-                            funcCost = (int v) => 40;
-                            flag = true;
-                        }
-                        else
-                        {
-                            v /= 2;
-                            num /= 2;
-                            gene.vals[k + 1] += v;
-                            Debug.Log(gene.vals[k + 1] + ": " + v + "/" + num);
-                            flag = true;
-                        }
-                        break;
-                    }
+                    if (!memory.allowStack)
+                        return false;
 
-                    return;
+                    if (ele.category == "slot")
+                    {
+                        gene.vals.Add(id);
+                        gene.vals.Add(v);
+                        memory.funcCost = (int v) => 40;
+                        flag = true;
+                    }
+                    else
+                    {
+                        v /= 2;
+                        num /= 2;
+                        gene.vals[k + 1] += v;
+                        Debug.Log(gene.vals[k + 1] + ": " + v + "/" + num);
+                        flag = true;
+                    }
+                    break;
                 }
             }
 
@@ -193,19 +187,38 @@ namespace Elin_GeneRecombinator
                     gene.vals.Add(v);
                 }
 
-                gene.cost += funcCost(num);
+                gene.cost += memory.funcCost(num);
+                return true;
             }
+            return false;
         }
 
-        private List<_memory> GenesToMemory(IEnumerable<DNA> genes)
+        private WeightedRandomBag<_memory> GenesToMemory(IEnumerable<DNA> genes)
         {
-            var list = new List<_memory>();
+            var list = new WeightedRandomBag<_memory>();
             foreach (var gen in genes) 
             {
                 for(int i = 0;  i < gen.vals.Count; i+=2)
                 {
-                    list.Add(new _memory { id = gen.vals[i], val = gen.vals[i+1] });
-                }
+                    var ele = Element.Get(gen.vals[i]);
+                    Func<int, int> funcCost = (int v) => v / 5 + 1;
+
+                    if (ele.category == "feat")
+                    {
+                        funcCost = (int v) => ele.cost[0] * 5;
+                    }
+                    else if (ele.category == "slot")
+                    {
+                        funcCost = (int v) => 20;
+                    }
+
+                    list.AddEntry(new _memory
+                    {
+                        id = gen.vals[i],
+                        val = gen.vals[i + 1],
+                        allowStack = ele.category == "feat" ? false : true,
+                        funcCost = funcCost
+                    }, Mod_GeneRecombinator.WeightMemoryByPower.Value ? funcCost(EClass.curve(gen.vals[i + 1], 20, 10, 90)) : 10);}
             }
             return list;
         }
@@ -220,6 +233,8 @@ namespace Elin_GeneRecombinator
         {
             public int id;
             public int val;
+            public Func<int, int> funcCost;
+            public bool allowStack;
         }
     }
 }

@@ -28,8 +28,7 @@ namespace Elin_GeneRecombinator
             }
         }
 
-        [HarmonyPrefix,
-        HarmonyPatch(typeof(TraitGeneMachine), nameof(TraitGeneMachine.OnUse), new Type[] {typeof(Chara)})]
+        [HarmonyPrefix,HarmonyPatch(typeof(TraitGeneMachine), nameof(TraitGeneMachine.OnUse), new Type[] {typeof(Chara)})]
         public static bool OnUse(TraitGeneMachine __instance, Chara c)
         {
             if (EClass._zone.IsUserZone)
@@ -51,6 +50,7 @@ namespace Elin_GeneRecombinator
                 }
                 else
                 {
+                    target.SetFaction(EClass.game.factions.Wilds);
                     //EClass.pc.Say("gene_finish", target, condition.gene, null, null);
                     EClass.pc.Pick(condition.gene);
                     target.Destroy();
@@ -69,6 +69,38 @@ namespace Elin_GeneRecombinator
             var grid = new InvOwnerGeneRecomb(gm, c);
             LayerDragGrid.Create(grid, false);
             return true;
+        }
+        
+        /*[HarmonyPrefix, HarmonyPatch(typeof(InvOwnerGene), nameof(InvOwnerGene.AllowStockIngredients), MethodType.Getter)]
+        public static bool AllowStockIng(InvOwnerGene __instance, ref bool __result)
+        {
+            Debug.Log("test");
+            if (__instance is InvOwnerGene)
+                __result = true;
+            else __result = __instance.AllowStockIngredients;
+
+            return false;
+        }*/
+
+        [HarmonyPrefix,HarmonyPatch(typeof(ConSuspend), nameof(ConSuspend.Tick))]
+        public static bool Tick(ConSuspend __instance)
+        {
+            if (__instance.uidMachine == 0)
+            {
+                return false;
+            }
+            TraitGeneMachine traitGeneMachine = __instance.owner.pos.FindThing<TraitGeneMachine>();
+            if (traitGeneMachine == null || !traitGeneMachine.owner.isOn || (__instance.duration > 0 && !__instance.HasGene))
+            {
+                if(__instance.owner.isStolen)
+                {
+                    Console.WriteLine("[RECOMB] destroying beggar");
+                    __instance.owner.SetFaction(EClass.game.factions.Wilds);
+                    __instance.owner.Die();
+                }
+                __instance.Kill(false);
+            }
+            return false;
         }
 
         #region debug overrides
