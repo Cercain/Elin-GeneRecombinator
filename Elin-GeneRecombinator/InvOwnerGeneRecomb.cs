@@ -216,7 +216,7 @@ namespace Elin_GeneRecombinator
                     {
                         id = gen.vals[i],
                         val = gen.vals[i + 1],
-                        allowStack = ele.category == "feat" ? false : true,
+                        allowStack = ele.category == "feat" || ele.category == "ability" ? false : true,
                         funcCost = funcCost
                     }, Mod_GeneRecombinator.WeightMemoryByPower.Value ? funcCost(EClass.curve(gen.vals[i + 1], 20, 10, 90)) : 10);}
             }
