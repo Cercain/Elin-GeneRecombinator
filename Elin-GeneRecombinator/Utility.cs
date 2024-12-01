@@ -9,6 +9,7 @@ namespace Elin_GeneRecombinator
     {
         private struct Entry
         {
+            public double rawWeight;
             public double accumulatedWeight;
             public T item;
         }
@@ -20,8 +21,9 @@ namespace Elin_GeneRecombinator
         public void AddEntry(T item, double weight)
         {
             accumulatedWeight += weight;
-            entries.Add(new Entry { item = item, accumulatedWeight = accumulatedWeight });
+            entries.Add(new Entry { item = item, accumulatedWeight = accumulatedWeight, rawWeight = weight });
         }
+
         public bool Any() 
         {  
             return entries.Any(); 
@@ -44,16 +46,39 @@ namespace Elin_GeneRecombinator
         public T PopRandom()
         {
             double r = rand.NextDouble() * accumulatedWeight;
-
+            Console.WriteLine($"[GeneRecomb][Debug] Popping");
             foreach (Entry entry in entries.ToList())
             {
                 if (entry.accumulatedWeight >= r)
                 {
                     entries.Remove(entry);
+                    Reweight();
                     return entry.item;
                 }
             }
             return default(T); //should only happen when there are no entries
+        }
+
+        private void Reweight()
+        {
+            var newentrylist = new List<Entry>();
+            accumulatedWeight = 0;
+            foreach(Entry entry in entries)
+            {
+                accumulatedWeight += entry.rawWeight;
+                newentrylist.Add(new Entry { item = entry.item, accumulatedWeight = accumulatedWeight, rawWeight = entry.rawWeight});
+            }
+            entries= newentrylist;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (Entry entry in entries)
+            {
+                sb.Append($"item:{entry.item.ToString()} acWeight:{entry.accumulatedWeight}");
+            }
+            return sb.ToString();
         }
     }
 }

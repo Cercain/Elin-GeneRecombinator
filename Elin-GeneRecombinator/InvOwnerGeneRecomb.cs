@@ -29,8 +29,8 @@ namespace Elin_GeneRecombinator
 
                 return t.c_DNA != null && card.c_DNA.type == t.c_DNA.type;
             }
-
-            return t.c_DNA != null;
+            
+            return t.c_DNA != null && (t.c_DNA.type == DNA.Type.Default || t.c_DNA.type == DNA.Type.Superior);
         }
 
         public override void _OnProcess(Thing t)
@@ -117,11 +117,21 @@ namespace Elin_GeneRecombinator
 
             var count = UnityEngine.Random.Range(avg+Mod_GeneRecombinator.MemoryAverageMin.Value, (avg+1)+Mod_GeneRecombinator.MemoryAverageMax.Value);
 
-            var memories = GenesToMemory(genes);
+            if (dna.type == DNA.Type.Default && Mod_GeneRecombinator.GeneUpgradeChance.Value > 0)
+            {
+                if(EClass.rnd(Mod_GeneRecombinator.GeneUpgradeChance.Value) == 0)
+                {
+                    dna.type = DNA.Type.Superior;
+                    count = Math.Max(4, count + (count / 2));
+                }
+            }
 
-            var selected = new List<_memory>();
+            var memories = GenesToMemory(genes);
+            Console.WriteLine($"[GeneRecomb][Debug] Memory options: {memories.ToString()}");
+
             for (int i = 0; i < count; i++)
             {
+                Console.WriteLine($"[GeneRecomb][Debug] pick mem {i}");
                 if (!memories.Any()) break;
 
                 bool added = false;
@@ -133,11 +143,7 @@ namespace Elin_GeneRecombinator
                 }
                 while (added == false);
             }
-
-            foreach (var item in selected.OrderBy(x => x.id))
-            {
-                AddVal(dna, item);
-            }
+            Console.WriteLine($"[GeneRecomb][Debug] done picking");
 
             dna.CalcCost();
             return thing;
@@ -239,6 +245,12 @@ namespace Elin_GeneRecombinator
             public int val;
             public Func<int, int> funcCost;
             public bool allowStack;
+
+            public override string ToString()
+            {
+                return $"[id:{id} val:{val} cost:{funcCost(val)} stack:{allowStack}]";
+            }
+
         }
     }
 }
