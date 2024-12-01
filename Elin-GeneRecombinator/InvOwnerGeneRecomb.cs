@@ -211,6 +211,10 @@ namespace Elin_GeneRecombinator
                     {
                         funcCost = (int v) => 20;
                     }
+                    else if (ele.category == "ability")
+                    {            
+                        funcCost = (int v) => 8 + ele.cost[0] / 10 * 2;
+                    }
 
                     list.AddEntry(new _memory
                     {
