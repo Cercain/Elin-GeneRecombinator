@@ -23,7 +23,7 @@ namespace Elin_GeneRecombinator
             {
                 if (geneMachine.CanUse(geneMachine.owner.Chara) && geneMachine.GetTarget() == null)
                 {
-                    p.TrySetAct("Recombinate", () => Recombinate(geneMachine, EClass.pc), __instance.owner, null, 1, false, true, false);
+                    p.TrySetAct("actRecombinate", () => Recombinate(geneMachine, EClass.pc), __instance.owner, null, 1, false, true, false);
                 }
             }
         }
