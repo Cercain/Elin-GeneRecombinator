@@ -146,6 +146,7 @@ namespace Elin_GeneRecombinator
             Console.WriteLine($"[GeneRecomb][Debug] done picking");
 
             dna.CalcCost();
+            dna.CalcSlot();
             return thing;
         }
 
