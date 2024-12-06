@@ -49,6 +49,9 @@ namespace Elin_GeneRecombinator
             Console.WriteLine($"[GeneRecomb][Debug] Popping");
             foreach (Entry entry in entries.ToList())
             {
+                if (entry.accumulatedWeight == 0)
+                    continue;
+
                 if (entry.accumulatedWeight >= r)
                 {
                     entries.Remove(entry);

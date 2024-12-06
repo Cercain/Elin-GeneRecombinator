@@ -28,6 +28,17 @@ namespace Elin_GeneRecombinator
             }
         }
 
+        [HarmonyPrefix, HarmonyPatch(typeof(DNA), nameof(DNA.GetText))]
+        public static bool DNA_GetText(DNA __instance, ref string __result)
+        {
+            if (__instance.id != "recombinated")
+                return true;
+
+            string s = "gene";
+            __result = s.lang(Lang.Get("recombinated").ToTitleCase(false), __instance.cost.ToString() ?? "", null, null, null);
+            return false;
+        }
+
         [HarmonyPrefix,HarmonyPatch(typeof(TraitGeneMachine), nameof(TraitGeneMachine.OnUse), new Type[] {typeof(Chara)})]
         public static bool OnUse(TraitGeneMachine __instance, Chara c)
         {

@@ -24,8 +24,17 @@ namespace Elin_GeneRecombinator
                 text_JP= "遺伝子再集合"
             };
 
+            LangGeneral.Row cardRecombinate = new LangGeneral.Row
+            {
+                id = "recombinated",
+                text = "Recombinated",
+                text_JP = "変更された"
+            };
+
             __instance.langGeneral.rows.Add(actRecombinate);
             __instance.langGeneral.SetRow(actRecombinate);
+            __instance.langGeneral.rows.Add(cardRecombinate);
+            __instance.langGeneral.SetRow(cardRecombinate);
             initialized = true;
         }
     }

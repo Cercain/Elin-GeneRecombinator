@@ -1,34 +1,50 @@
-[b][Currently only in English][/b]
+﻿[b][GPT translated to JP / GPTを日本語に翻訳しました ][/b]
+[b][Now with Config / 現在設定可能][/b]
 
 [h1][b]Genetic Recombination[/b][/h1]
+[h1][b]遺伝子再集合[/b][/h1]
 
 This mod add a secondary function to the Gene Machine: Recombinate!
-[img]https://i.imgur.com/g8dHRiB.png[/img]
-(it also adds a box lookup to both the normal Use and Recombinate functions for easier gene access)
+このモッドは、遺伝子合成機械に二次機能を追加します：遺伝子再配置!
+[img]https://i.imgur.com/V2RJNW5.png[/img]
+(it also adds a box lookup to Recombinate for easier gene access)
 
 
 Select two genes of the same type (normal or superior).
-[img]https://i.imgur.com/DQboFKh.png[/img]
+同じタイプの遺伝子を2つ選択してください (ゼリー / 優性)
+[img]https://i.imgur.com/GFDokaQ.png[/img]
 
 A helpful Lab Assistant will get to work recombinating the input genes (helpful Lab Assistant is automatically supplied).
 This can be sped up using Syringes from Little Garden.
+役立つラボアシスタントが入力遺伝子の再組み換え作業を開始します（役立つラボアシスタントは自動的に提供されます）。これは、リトルガーデンの注射器を使用することで速度を上げることができます。
 [img]https://i.imgur.com/ZiprTWZ.png[/img]
 
 Once the [strike]Incubation Sacrifice[/strike] helpful Lab Assistant has finished recombinating the genes, you can Use the Gene Machine to get your new gene!
+一度、[strike]インキュベーションの犠牲[/strike]役立つラボアシスタントが遺伝子の再結合を終えたら、遺伝子マシンを使って新しい遺伝子を手に入れることができます！
+
+the amount of memories a recombinated gene will have is determined by the average amount of memories of the input genes +/- 1 (configurable).
+ie. gene1: 4 memories & gene 2: 3 memories. this averages to 3.5, however we round this up to 4. Giving the output gene a total of 3-5 memories randomly chosen from the input genes.
+By default the selected is a weighted random making more valuable mods more likely to be selected, you can turn this off in the config for full rng.
+遺伝子が持つ記憶の量は、入力遺伝子の平均的な記憶の量 +/- 1（設定可能）によって決まります。
+つまり、遺伝子は4つの記憶、遺伝子は3つの記憶です。これを平均すると3.5になりますが、これを4に切り上げます。出力遺伝子には、入力遺伝子からランダムに選ばれた合計3〜5の記憶が与えられます。
+デフォルトでは、選択されたものは加重ランダムであり、より価値のあるモッドが選ばれる可能性が高くなります。完全なランダム性を求める場合は、設定でこれをオフにすることができます。
+
+Normal (jelly) genes have a chance to upgrade to superior genes with an increased amount of memories it will take.
+By default this is a 1 in 10 chance, but can be changed in the config
+ゼリー遺伝子は、記憶の量が増えることで優性遺伝子にアップグレードする可能性があります。デフォルトでは、これは10分の1の確率ですが、設定で変更することができます。
+
+Attribute & Skill memories of the same type will have their values combined, so you may see genes with less than the expected minimum, but this is because two memories combined.
+同じタイプの属性とスキルの記憶は、その値が統合されるため、期待される最小値未満の遺伝子が見られることがありますが、これは2つの記憶が統合されたためです。
 
 With this mod you will be able to get multiple body slots on the same gene (at an increased feat cost)
+このモッドを使うことで、同じ遺伝子に複数のボディスロットを取得することができるようになります（費用は増加します）。
 [img]https://i.imgur.com/RCrhG3r.png[/img]
-
-
-the amount of memories a recombinated gene will have is determined by the average amount of memories of the input genes +/- 1.
-ie. gene1: 4 memories & gene 2: 3 memories. this averages to 3.5, however we round this up to 4. Giving the output gene a total of 3-5 memories randomly chosen from the input genes.
 
 
 [h2]Future Plans[h2]
 [list]
-[*]Config for amount of memories
-[*]Config for weighting the best memories to be more/less likely
 [*]Config or upgrade system to allow for more genes to combine at once
-[*]Chance for normal gene inputs to upgrade to a superior gene allowing for more memories
 [*]It's own separate machine
 [/list]
+
+[h3][url=https://github.com/Cercain/Elin-GeneRecombinator]Source Code[/url][/h3]

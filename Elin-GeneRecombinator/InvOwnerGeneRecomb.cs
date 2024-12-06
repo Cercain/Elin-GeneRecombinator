@@ -223,13 +223,23 @@ namespace Elin_GeneRecombinator
                         funcCost = (int v) => 8 + ele.cost[0] / 10 * 2;
                     }
 
+                    var weight = Mod_GeneRecombinator.WeightMemoryByPower.Value ? funcCost(EClass.curve(gen.vals[i + 1], 20, 10, 90)) : 10;
+
+                    if (ele.category == "attribute" || ele.category == "skill")
+                    {
+                        if (Mod_GeneRecombinator.SkillMemoryChanceMultiplier.Value == 0)
+                            continue;
+                        else
+                            weight = (int)(weight * Mod_GeneRecombinator.SkillMemoryChanceMultiplier.Value);
+                    }
+
                     list.AddEntry(new _memory
                     {
                         id = gen.vals[i],
                         val = gen.vals[i + 1],
                         allowStack = ele.category == "feat" || ele.category == "ability" ? false : true,
                         funcCost = funcCost
-                    }, Mod_GeneRecombinator.WeightMemoryByPower.Value ? funcCost(EClass.curve(gen.vals[i + 1], 20, 10, 90)) : 10);}
+                    }, weight);}
             }
             return list;
         }
