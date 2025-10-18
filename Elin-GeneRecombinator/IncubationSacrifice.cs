@@ -26,7 +26,7 @@ namespace Elin_GeneRecombinator
             return chara;
         }
 
-        public override void Die(Element e = null, Card origin = null, AttackSource attackSource = AttackSource.None)
+        public override void Die(Element e = null, Card origin = null, AttackSource attackSource = AttackSource.None, Chara originalTarget = null)
         {
             Console.WriteLine(JsonConvert.SerializeObject(this.held));
 
